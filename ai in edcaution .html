@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Education — Kamalpreet Kaur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0F3D2E',
+                        accent: '#D2F86D',
+                        'accent-hover': '#c2eb5b',
+                        'warm-bg': '#FAFAF8',
+                        'warm-card': '#F5F4EF',
+                        'warm-border': '#E8E6DF',
+                        'deep-green': '#0A2B1F',
+                        'mid-green': '#1A5C43',
+                        'soft-green': '#E8F5EE',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: #FAFAF8; color: #0f172a; overflow-x: hidden; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FAFAF8; }
+        ::-webkit-scrollbar-thumb { background: #0F3D2E; border-radius: 3px; }
+
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .fade-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* Hero Pattern */
+        .hero-pattern {
+            background-image: radial-gradient(circle at 20% 50%, rgba(210, 248, 109, 0.08) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, rgba(15, 61, 46, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 60% 80%, rgba(210, 248, 109, 0.06) 0%, transparent 50%);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .float-1 { animation: float 6s ease-in-out infinite; }
+        .float-2 { animation: float 8s ease-in-out infinite 1s; }
+        .float-3 { animation: float 7s ease-in-out infinite 2s; }
+
+        /* Pulse ring */
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid #D2F86D;
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        /* Nav active */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D2F86D;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Card hover */
+        .card-hover {
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(15, 61, 46, 0.15);
+        }
+
+        /* Benefit icon container */
+        .benefit-icon {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .group:hover .benefit-icon {
+            background-color: #0F3D2E;
+            transform: scale(1.1);
+        }
+        .group:hover .benefit-icon svg {
+            color: #D2F86D;
+        }
+
+        /* Tool card border animation */
+        .tool-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #0F3D2E, #D2F86D);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Section divider */
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #0F3D2E, #D2F86D);
+            border-radius: 2px;
+        }
+
+        /* Counter animation */
+        .counter {
+            display: inline-block;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Toast */
+        .toast {
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Progress bar in nav */
+        .scroll-progress {
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+
+        /* Challenge card number */
+        .challenge-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            color: rgba(15, 61, 46, 0.06);
+            position: absolute;
+            top: -10px;
+            right: 16px;
+        }
+
+        /* Future timeline */
+        .timeline-line {
+            background: linear-gradient(180deg, #0F3D2E, #D2F86D, #0F3D2E);
+        }
+
+        /* Marquee for stats */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            animation: marquee 30s linear infinite;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #0F3D2E 0%, #1A5C43 50%, #0F3D2E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Use case tag */
+        .use-tag {
+            transition: all 0.3s ease;
+        }
+        .use-tag:hover {
+            background-color: #0F3D2E;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        /* Back to top */
+        .back-to-top {
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-[3px] z-[60]">
+        <div id="scrollProgress" class="scroll-progress h-full bg-gradient-to-r from-primary via-accent to-primary"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#hero" class="flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center group-hover:bg-mid-green transition-colors duration-300">
+                        <i data-lucide="brain" class="w-5 h-5 text-accent"></i>
+                    </div>
+                    <span class="font-serif font-600 text-lg tracking-tight text-primary">Kamalpreet</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#intro" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">Introduction</a>
+                    <a href="#what-is-ai" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">What is AI</a>
+                    <a href="#benefits" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">Benefits</a>
+                    <a href="#tools" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">AI Tools</a>
+                    <a href="#uses" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">Uses</a>
+                    <a href="#challenges" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">Challenges</a>
+                    <a href="#future" class="nav-link text-sm font-medium text-slate-600 hover:text-primary transition-colors">Future</a>
+                </div>
+
+                <!-- CTA -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="#conclusion" class="inline-flex items-center gap-2 bg-primary text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-mid-green transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+                        Conclusion
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger -->
+                <button id="menuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-warm-card transition-colors" aria-label="Open Menu">
+                    <i data-lucide="menu" class="w-5 h-5 text-primary"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 z-[55] bg-warm-bg">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center justify-between px-5 h-20">
+                <a href="#hero" class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
+                        <i data-lucide="brain" class="w-5 h-5 text-accent"></i>
+                    </div>
+                    <span class="font-serif font-semibold text-lg tracking-tight text-primary">Kamalpreet</span>
+                </a>
+                <button id="closeMenuBtn" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-warm-card transition-colors" aria-label="Close Menu">
+                    <i data-lucide="x" class="w-5 h-5 text-primary"></i>
+                </button>
+            </div>
+            <div class="flex-1 flex flex-col justify-center px-8 gap-2">
+                <a href="#intro" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">Introduction</a>
+                <a href="#what-is-ai" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">What is AI</a>
+                <a href="#benefits" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">Benefits</a>
+                <a href="#tools" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">AI Tools</a>
+                <a href="#uses" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">Uses</a>
+                <a href="#challenges" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">Challenges</a>
+                <a href="#future" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 border-b border-warm-border hover:pl-2 transition-all">Future</a>
+                <a href="#conclusion" class="mobile-nav-link text-2xl font-serif font-medium text-primary py-3 hover:pl-2 transition-all">Conclusion</a>
+            </div>
+            <div class="px-8 pb-8">
+                <p class="text-sm text-slate-500">ITI Women Ropar</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="hero" class="relative min-h-screen flex items-center hero-pattern overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-32 left-10 w-20 h-20 bg-accent/10 rounded-full blur-2xl float-1"></div>
+        <div class="absolute bottom-40 right-20 w-32 h-32 bg-primary/5 rounded-full blur-3xl float-2"></div>
+        <div class="absolute top-1/2 left-1/3 w-16 h-16 bg-accent/8 rounded-full blur-xl float-3"></div>
+
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 w-full pt-28 pb-16 lg:pt-0 lg:pb-0">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <!-- Left Content -->
+                <div class="order-2 lg:order-1">
+                    <div class="fade-up">
+                        <div class="inline-flex items-center gap-2 bg-soft-green text-primary text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-6">
+                            <span class="w-2 h-2 bg-accent rounded-full relative pulse-ring"></span>
+                            Research Portfolio
+                        </div>
+                    </div>
+
+                    <h1 class="fade-up stagger-1 font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-500 tracking-tight leading-[1.1] text-primary mb-6">
+                        AI in
+                        <span class="relative inline-block">
+                            Education
+                            <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                                <path d="M2 8C50 2 100 2 150 6C200 10 250 4 298 8" stroke="#D2F86D" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                    </h1>
+
+                    <p class="fade-up stagger-2 text-lg lg:text-xl text-slate-600 leading-relaxed mb-8 max-w-lg">
+                        Exploring how artificial intelligence is reshaping the way we learn, teach, and grow — a comprehensive study by
+                        <span class="font-medium text-primary">Kamalpreet Kaur</span>.
+                    </p>
+
+                    <div class="fade-up stagger-3 flex flex-wrap gap-4 mb-10">
+                        <a href="#what-is-ai" class="inline-flex items-center gap-2.5 bg-primary text-white font-medium px-7 py-3.5 rounded-full hover:bg-mid-green transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-0.5">
+                            Start Exploring
+                            <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#benefits" class="inline-flex items-center gap-2.5 bg-white text-primary font-medium px-7 py-3.5 rounded-full border border-warm-border hover:border-primary/20 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+                            View Benefits
+                        </a>
+                    </div>
+
+                    <div class="fade-up stagger-4 flex items-center gap-6">
+                        <div class="flex -space-x-3">
+                            <img src="https://picsum.photos/seed/student1/80/80.jpg" alt="" class="w-10 h-10 rounded-full border-2 border-white object-cover">
+                            <img src="https://picsum.photos/seed/student2/80/80.jpg" alt="" class="w-10 h-10 rounded-full border-2 border-white object-cover">
+                            <img src="https://picsum.photos/seed/student3/80/80.jpg" alt="" class="w-10 h-10 rounded-full border-2 border-white object-cover">
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-primary">ITI Women Ropar</p>
+                            <p class="text-xs text-slate-500">Academic Research Project</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual -->
+                <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
+                    <div class="relative">
+                        <div class="scale-in stagger-2 w-72 h-72 sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] rounded-3xl overflow-hidden shadow-2xl shadow-primary/10">
+                            <img src="https://picsum.photos/seed/aieducation-hero/840/840.jpg" alt="AI in Education" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
+                        </div>
+
+                        <!-- Floating Card 1 -->
+                        <div class="absolute -left-6 sm:-left-10 bottom-12 bg-white rounded-2xl p-4 shadow-xl shadow-slate-900/10 float-1 hidden sm:block">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center">
+                                    <i data-lucide="trending-up" class="w-5 h-5 text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500">AI Adoption</p>
+                                    <p class="text-lg font-semibold text-primary">+47%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Card 2 -->
+                        <div class="absolute -right-4 sm:-right-8 top-16 bg-white rounded-2xl p-4 shadow-xl shadow-slate-900/10 float-2 hidden sm:block">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-soft-green rounded-xl flex items-center justify-center">
+                                    <i data-lucide="graduation-cap" class="w-5 h-5 text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500">Global Reach</p>
+                                    <p class="text-lg font-semibold text-primary">3.5B+</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 fade-up stagger-5 hidden lg:flex flex-col items-center gap-2">
+            <span class="text-xs text-slate-400 tracking-widest uppercase">Scroll</span>
+            <div class="w-6 h-10 border-2 border-slate-300 rounded-full flex justify-center pt-2">
+                <div class="w-1.5 h-3 bg-primary rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== STATS MARQUEE ===== -->
+    <section class="py-6 bg-primary overflow-hidden">
+        <div class="marquee-track flex items-center gap-12 whitespace-nowrap">
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="globe" class="w-4 h-4 text-accent"></i> 180+ Countries Using AI in Education</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-accent"></i> $20 Billion Market by 2027</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-accent"></i> 65% of Teachers Use AI Tools</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-accent"></i> 38% Improvement in Student Outcomes</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="brain" class="w-4 h-4 text-accent"></i> AI Personalization for Every Learner</span>
+            <span class="text-accent/40">?</span>
+            <!-- Duplicate for seamless loop -->
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="globe" class="w-4 h-4 text-accent"></i> 180+ Countries Using AI in Education</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-accent"></i> $20 Billion Market by 2027</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-accent"></i> 65% of Teachers Use AI Tools</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-accent"></i> 38% Improvement in Student Outcomes</span>
+            <span class="text-accent/40">?</span>
+            <span class="text-white/80 text-sm font-medium flex items-center gap-2"><i data-lucide="brain" class="w-4 h-4 text-accent"></i> AI Personalization for Every Learner</span>
+            <span class="text-accent/40">?</span>
+        </div>
+    </section>
+
+    <!-- ===== INTRODUCTION ===== -->
+    <section id="intro" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <!-- Image Side -->
+                <div class="fade-left">
+                    <div class="relative">
+                        <div class="rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://picsum.photos/seed/classroom-modern/800/600.jpg" alt="Modern Classroom" class="w-full h-80 lg:h-[480px] object-cover">
+                        </div>
+                        <!-- Accent block -->
+                        <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-accent rounded-2xl -z-10"></div>
+                        <!-- Small detail card -->
+                        <div class="absolute -top-4 -left-4 bg-white rounded-xl p-3 shadow-lg hidden sm:block">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                                    <i data-lucide="sparkles" class="w-4 h-4 text-accent"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-primary">AI Powered</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Side -->
+                <div>
+                    <div class="fade-up">
+                        <span class="text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">Introduction</span>
+                        <h2 class="font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                            Transforming Learning <br>for the <em class="text-mid-green">Next Generation</em>
+                        </h2>
+                    </div>
+                    <div class="section-divider mb-6 fade-up stagger-1"></div>
+                    <div class="fade-up stagger-2 space-y-4 text-slate-600 leading-relaxed">
+                        <p>
+                            Education has always been the cornerstone of human progress. Today, we stand at the intersection of tradition and technology, where <strong class="text-primary">Artificial Intelligence</strong> is not just a tool — it's a transformative force redefining how knowledge is delivered, absorbed, and applied.
+                        </p>
+                        <p>
+                            My name is <strong class="text-primary">Kamalpreet Kaur</strong>, and I am a student at <strong class="text-primary">ITI Women Ropar</strong>. Through this portfolio, I present my research and understanding of how AI is revolutionizing education — from personalized learning paths to intelligent tutoring systems.
+                        </p>
+                        <p>
+                            This exploration covers the benefits, tools, real-world applications, challenges, and the exciting future that AI promises for learners and educators worldwide.
+                        </p>
+                    </div>
+                    <div class="fade-up stagger-3 mt-8 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center">
+                            <i data-lucide="user" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-primary">Kamalpreet Kaur</p>
+                            <p class="text-sm text-slate-500">Student, ITI Women Ropar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHAT IS AI IN EDUCATION ===== -->
+    <section id="what-is-ai" class="py-20 lg:py-28 bg-warm-card">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">Understanding AI</span>
+                <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                    What is AI in Education?
+                </h2>
+                <div class="section-divider mx-auto mb-6 fade-up stagger-2"></div>
+                <p class="fade-up stagger-3 text-slate-600 text-lg leading-relaxed">
+                    Artificial Intelligence in education refers to the use of intelligent algorithms, machine learning, and data analytics to enhance teaching, learning, and educational administration.
+                </p>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="fade-up stagger-1 bg-white rounded-2xl p-8 card-hover border border-warm-border/50">
+                    <div class="w-14 h-14 bg-soft-green rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="cpu" class="w-7 h-7 text-primary"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 text-primary mb-3">Machine Learning</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Algorithms that learn from student data to identify patterns, predict outcomes, and adapt content delivery in real-time without explicit programming.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="fade-up stagger-2 bg-white rounded-2xl p-8 card-hover border border-warm-border/50">
+                    <div class="w-14 h-14 bg-soft-green rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="message-circle" class="w-7 h-7 text-primary"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 text-primary mb-3">Natural Language Processing</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Enables machines to understand and respond to human language, powering chatbots, essay graders, and voice-activated learning assistants.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="fade-up stagger-3 bg-white rounded-2xl p-8 card-hover border border-warm-border/50">
+                    <div class="w-14 h-14 bg-soft-green rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="eye" class="w-7 h-7 text-primary"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 text-primary mb-3">Computer Vision</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Allows AI to interpret visual information — used in proctoring systems, handwriting recognition, and interactive visual learning tools.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom Highlight -->
+            <div class="fade-up mt-12 bg-primary rounded-2xl p-8 lg:p-12 text-center">
+                <div class="max-w-2xl mx-auto">
+                    <i data-lucide="quote" class="w-10 h-10 text-accent/50 mx-auto mb-4"></i>
+                    <p class="text-white/90 text-lg lg:text-xl leading-relaxed font-light italic font-serif">
+                        "AI in education is not about replacing teachers — it's about giving them superpowers to understand, guide, and inspire every student uniquely."
+                    </p>
+                    <p class="text-accent text-sm mt-4 font-medium">— The Future of Learning Report</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BENEFITS OF AI ===== -->
+    <section id="benefits" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">Advantages</span>
+                <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                    Benefits of AI in Education
+                </h2>
+                <div class="section-divider mx-auto mb-6 fade-up stagger-2"></div>
+                <p class="fade-up stagger-3 text-slate-600 text-lg leading-relaxed">
+                    From personalized learning to administrative efficiency, AI brings transformative advantages to every level of education.
+                </p>
+            </div>
+
+            <!-- Benefits Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Benefit 1 -->
+                <div class="fade-up stagger-1 group bg-white rounded-2xl p-7 border border-warm-border/50 card-hover">
+                    <div class="benefit-icon w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5 transition-all duration-300">
+                        <i data-lucide="fingerprint" class="w-6 h-6 text-primary transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-500 text-primary mb-2">Personalized Learning</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">AI adapts content, pace, and difficulty to each student's unique learning style and progress.</p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="fade-up stagger-2 group bg-white rounded-2xl p-7 border border-warm-border/50 card-hover">
+                    <div class="benefit-icon w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5 transition-all duration-300">
+                        <i data-lucide="clock" class="w-6 h-6 text-primary transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-500 text-primary mb-2">24/7 Availability</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">AI tutors and assistants are always available, breaking the barriers of time and location.</p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="fade-up stagger-3 group bg-white rounded-2xl p-7 border border-warm-border/50 card-hover">
+                    <div class="benefit-icon w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5 transition-all duration-300">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-primary transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-500 text-primary mb-2">Instant Feedback</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Students receive immediate, detailed feedback on assignments, quizzes, and practice exercises.</p>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="fade-up stagger-4 group bg-white rounded-2xl p-7 border border-warm-border/50 card-hover">
+                    <div class="benefit-icon w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5 transition-all duration-300">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-primary transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-500 text-primary mb-2">Reduced Teacher Burnout</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Automating grading, attendance, and admin tasks lets teachers focus on what matters most — teaching.</p>
+                </div>
+
+                <!-- Benefit 5 -->
+                <div class="fade-up stagger-5 group bg-white rounded-2xl p-7 border border-warm-border/50 card-hover">
+                    <div class="benefit-icon w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5 transition-all duration-300">
+                        <i data-lucide="accessibility" class="w-6 h-6 text-primary transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-500 text-primary mb-2">Inclusive Education</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">AI tools like speech-to-text, translations, and adaptive interfaces make learning accessible to all.</p>
+                </div>
+
+                <!-- Benefit 6 -->
+                <div class="fade-up stagger-6 group bg-white rounded-2xl p-7 border border-warm-border/50 card-hover">
+                    <div class="benefit-icon w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5 transition-all duration-300">
+                        <i data-lucide="lightbulb" class="w-6 h-6 text-primary transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-500 text-primary mb-2">Data-Driven Insights</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Institutions can make informed decisions using analytics on student performance and engagement trends.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AI TOOLS IN EDUCATION ===== -->
+    <section id="tools" class="py-20 lg:py-28 bg-primary relative overflow-hidden">
+        <!-- Decorative -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-4 block">Instruments of Change</span>
+                <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-white leading-tight mb-6">
+                    AI Tools in Education
+                </h2>
+                <div class="section-divider mx-auto mb-6 fade-up stagger-2"></div>
+                <p class="fade-up stagger-3 text-white/70 text-lg leading-relaxed">
+                    Powerful AI-powered platforms and tools that are already making a difference in classrooms worldwide.
+                </p>
+            </div>
+
+            <!-- Tools Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tool 1 -->
+                <div class="fade-up stagger-1 tool-card bg-white/5 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:bg-white/10 transition-all duration-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-11 h-11 bg-accent/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="bot" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-white">ChatGPT / AI Chatbots</h3>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">Conversational AI that answers student questions, explains concepts, and assists with writing and research.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Q&A</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Writing</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Research</span>
+                    </div>
+                </div>
+
+                <!-- Tool 2 -->
+                <div class="fade-up stagger-2 tool-card bg-white/5 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:bg-white/10 transition-all duration-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-11 h-11 bg-accent/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="target" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-white">Duolingo</h3>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">Uses AI to personalize language lessons, adjust difficulty, and keep learners motivated through gamification.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Language</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Gamified</span>
+                    </div>
+                </div>
+
+                <!-- Tool 3 -->
+                <div class="fade-up stagger-3 tool-card bg-white/5 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:bg-white/10 transition-all duration-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-11 h-11 bg-accent/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="presentation" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-white">Grammarly</h3>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">AI writing assistant that provides real-time grammar, style, and tone suggestions to improve student writing.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Writing</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Grammar</span>
+                    </div>
+                </div>
+
+                <!-- Tool 4 -->
+                <div class="fade-up stagger-4 tool-card bg-white/5 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:bg-white/10 transition-all duration-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-11 h-11 bg-accent/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="video" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-white">Khan Academy (Khanmigo)</h3>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">AI-powered tutor that guides students through problems step-by-step without giving away the answers.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Tutoring</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Math</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Science</span>
+                    </div>
+                </div>
+
+                <!-- Tool 5 -->
+                <div class="fade-up stagger-5 tool-card bg-white/5 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:bg-white/10 transition-all duration-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-11 h-11 bg-accent/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="image" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-white">Canva for Education</h3>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">AI-powered design tool that helps students and teachers create presentations, infographics, and visual content easily.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Design</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Visual</span>
+                    </div>
+                </div>
+
+                <!-- Tool 6 -->
+                <div class="fade-up stagger-6 tool-card bg-white/5 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:bg-white/10 transition-all duration-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-11 h-11 bg-accent/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="brain-circuit" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-white">Coursera / EdX</h3>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">Online learning platforms using AI for course recommendations, peer grading, and adaptive learning paths.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Courses</span>
+                        <span class="text-[10px] font-medium tracking-wider uppercase text-accent/80 bg-accent/10 px-2.5 py-1 rounded-full">Certification</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== USES OF AI ===== -->
+    <section id="uses" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">Real-World Applications</span>
+                <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                    Uses of AI in Education
+                </h2>
+                <div class="section-divider mx-auto mb-6 fade-up stagger-2"></div>
+                <p class="fade-up stagger-3 text-slate-600 text-lg leading-relaxed">
+                    AI is being applied across every dimension of the educational experience — from the classroom to the administration.
+                </p>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Large Card -->
+                <div class="fade-up stagger-1 md:col-span-2 lg:col-span-2 bg-warm-card rounded-2xl p-8 lg:p-10 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                                <i data-lucide="route" class="w-6 h-6 text-accent"></i>
+                            </div>
+                            <h3 class="font-serif text-xl font-500 text-primary">Adaptive Learning Paths</h3>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed mb-6 max-w-xl">
+                            AI analyzes a student's strengths, weaknesses, and learning pace to create a completely customized curriculum. If a student struggles with fractions, the system provides extra practice and alternative explanations until mastery is achieved — then automatically advances.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="use-tag text-xs font-medium text-primary bg-soft-green px-3.5 py-1.5 rounded-full cursor-default">Self-Paced</span>
+                            <span class="use-tag text-xs font-medium text-primary bg-soft-green px-3.5 py-1.5 rounded-full cursor-default">Custom Curriculum</span>
+                            <span class="use-tag text-xs font-medium text-primary bg-soft-green px-3.5 py-1.5 rounded-full cursor-default">Mastery-Based</span>
+                        </div>
+                    </div>
+                    <img src="https://picsum.photos/seed/adaptive-learning/400/300.jpg" alt="" class="absolute right-0 bottom-0 w-48 h-48 object-cover rounded-tl-2xl opacity-20 hidden lg:block">
+                </div>
+
+                <!-- Small Card -->
+                <div class="fade-up stagger-2 bg-primary rounded-2xl p-8 card-hover text-white">
+                    <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="check-square" class="w-6 h-6 text-accent"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 mb-3">Automated Grading</h3>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        AI can grade multiple-choice, fill-in-the-blank, and even essay-type answers with remarkable accuracy, saving teachers hours of work.
+                    </p>
+                </div>
+
+                <!-- Small Card -->
+                <div class="fade-up stagger-3 bg-warm-card rounded-2xl p-8 border border-warm-border/50 card-hover">
+                    <div class="w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="mic" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 text-primary mb-3">Speech & Language</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        AI-powered pronunciation assessment and language learning tools help students practice speaking and listening skills with real-time feedback.
+                    </p>
+                </div>
+
+                <!-- Small Card -->
+                <div class="fade-up stagger-4 bg-warm-card rounded-2xl p-8 border border-warm-border/50 card-hover">
+                    <div class="w-12 h-12 bg-soft-green rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="scan-search" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 text-primary mb-3">Content Generation</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Teachers use AI to generate quizzes, lesson plans, summaries, and study materials tailored to their specific classroom needs.
+                    </p>
+                </div>
+
+                <!-- Large Card -->
+                <div class="fade-up stagger-5 md:col-span-2 lg:col-span-1 bg-primary rounded-2xl p-8 card-hover text-white">
+                    <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 text-accent"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-500 mb-3">Early Intervention</h3>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        AI detects students at risk of dropping out or falling behind by analyzing attendance, engagement, and performance patterns — enabling timely support.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CHALLENGES ===== -->
+    <section id="challenges" class="py-20 lg:py-28 bg-warm-card">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">The Other Side</span>
+                <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                    Challenges of AI in Education
+                </h2>
+                <div class="section-divider mx-auto mb-6 fade-up stagger-2"></div>
+                <p class="fade-up stagger-3 text-slate-600 text-lg leading-relaxed">
+                    While AI offers immense potential, it also brings significant challenges that must be thoughtfully addressed.
+                </p>
+            </div>
+
+            <!-- Challenges Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Challenge 1 -->
+                <div class="fade-up stagger-1 bg-white rounded-2xl p-7 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <span class="challenge-num">01</span>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center mb-5">
+                            <i data-lucide="lock" class="w-5 h-5 text-red-500"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-primary mb-2">Data Privacy</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">AI systems collect vast amounts of student data. Protecting this sensitive information from breaches and misuse is a critical concern.</p>
+                    </div>
+                </div>
+
+                <!-- Challenge 2 -->
+                <div class="fade-up stagger-2 bg-white rounded-2xl p-7 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <span class="challenge-num">02</span>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center mb-5">
+                            <i data-lucide="scale" class="w-5 h-5 text-amber-600"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-primary mb-2">Bias & Fairness</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">AI models can inherit biases from training data, potentially disadvantaging certain student groups based on race, gender, or socioeconomic status.</p>
+                    </div>
+                </div>
+
+                <!-- Challenge 3 -->
+                <div class="fade-up stagger-3 bg-white rounded-2xl p-7 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <span class="challenge-num">03</span>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center mb-5">
+                            <i data-lucide="wifi-off" class="w-5 h-5 text-orange-500"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-primary mb-2">Digital Divide</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Not all students have access to devices, reliable internet, or digital literacy skills, creating a gap between AI-enabled and traditional learners.</p>
+                    </div>
+                </div>
+
+                <!-- Challenge 4 -->
+                <div class="fade-up stagger-4 bg-white rounded-2xl p-7 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <span class="challenge-num">04</span>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-5">
+                            <i data-lucide="user-x" class="w-5 h-5 text-blue-500"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-primary mb-2">Loss of Human Touch</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Over-reliance on AI may reduce meaningful teacher-student interactions, mentoring, and the emotional support that only humans can provide.</p>
+                    </div>
+                </div>
+
+                <!-- Challenge 5 -->
+                <div class="fade-up stagger-5 bg-white rounded-2xl p-7 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <span class="challenge-num">05</span>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center mb-5">
+                            <i data-lucide="indian-rupee" class="w-5 h-5 text-purple-500"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-primary mb-2">High Costs</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Implementing AI infrastructure, training staff, and maintaining systems requires significant financial investment that many institutions cannot afford.</p>
+                    </div>
+                </div>
+
+                <!-- Challenge 6 -->
+                <div class="fade-up stagger-6 bg-white rounded-2xl p-7 border border-warm-border/50 card-hover relative overflow-hidden">
+                    <span class="challenge-num">06</span>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center mb-5">
+                            <i data-lucide="help-circle" class="w-5 h-5 text-teal-500"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-500 text-primary mb-2">Over-Dependence</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Students may become overly dependent on AI for answers, hindering critical thinking, creativity, and genuine problem-solving abilities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FUTURE OF AI IN EDUCATION ===== -->
+    <section id="future" class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">Looking Ahead</span>
+                <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                    Future of AI in Education
+                </h2>
+                <div class="section-divider mx-auto mb-6 fade-up stagger-2"></div>
+                <p class="fade-up stagger-3 text-slate-600 text-lg leading-relaxed">
+                    The future promises even more profound changes as AI continues to evolve and integrate deeper into the learning ecosystem.
+                </p>
+            </div>
+
+            <!-- Timeline -->
+            <div class="relative max-w-4xl mx-auto">
+                <!-- Vertical Line (hidden on mobile) -->
+                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px timeline-line -translate-x-1/2"></div>
+
+                <!-- Timeline Item 1 -->
+                <div class="fade-up stagger-1 relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12 mb-12 md:mb-16">
+                    <div class="md:w-1/2 md:text-right md:pr-12">
+                        <div class="bg-warm-card rounded-2xl p-7 border border-warm-border/50 card-hover">
+                            <span class="text-xs font-semibold tracking-widest uppercase text-mid-green mb-2 block">Near Term</span>
+                            <h3 class="font-serif text-xl font-500 text-primary mb-2">AI Teaching Assistants</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">Every teacher will have a personal AI assistant to handle routine tasks, draft lesson plans, and provide supplementary instruction to students.</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-accent rounded-full border-4 border-warm-bg z-10 shadow-md"></div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <span class="inline-flex items-center gap-2 text-sm font-semibold text-primary bg-soft-green px-4 py-2 rounded-full">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> 2025 – 2027
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="fade-up stagger-2 relative flex flex-col md:flex-row-reverse items-start md:items-center gap-6 md:gap-12 mb-12 md:mb-16">
+                    <div class="md:w-1/2 md:text-left md:pl-12">
+                        <div class="bg-primary rounded-2xl p-7 card-hover">
+                            <span class="text-xs font-semibold tracking-widest uppercase text-accent mb-2 block">Mid Term</span>
+                            <h3 class="font-serif text-xl font-500 text-white mb-2">Immersive AI Classrooms</h3>
+                            <p class="text-white/60 text-sm leading-relaxed">Combination of AI with VR/AR will create fully immersive learning environments — students could virtually visit historical events or explore the human body from inside.</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-accent rounded-full border-4 border-warm-bg z-10 shadow-md"></div>
+                    <div class="md:w-1/2 md:text-right md:pr-12">
+                        <span class="inline-flex items-center gap-2 text-sm font-semibold text-primary bg-soft-green px-4 py-2 rounded-full">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> 2027 – 2030
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="fade-up stagger-3 relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12 mb-12 md:mb-16">
+                    <div class="md:w-1/2 md:text-right md:pr-12">
+                        <div class="bg-warm-card rounded-2xl p-7 border border-warm-border/50 card-hover">
+                            <span class="text-xs font-semibold tracking-widest uppercase text-mid-green mb-2 block">Long Term</span>
+                            <h3 class="font-serif text-xl font-500 text-primary mb-2">Lifelong AI Companions</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">AI learning companions that grow with students from childhood through adulthood, understanding their complete learning history, preferences, and goals.</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-accent rounded-full border-4 border-warm-bg z-10 shadow-md"></div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <span class="inline-flex items-center gap-2 text-sm font-semibold text-primary bg-soft-green px-4 py-2 rounded-full">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> 2030 – 2035
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 4 -->
+                <div class="fade-up stagger-4 relative flex flex-col md:flex-row-reverse items-start md:items-center gap-6 md:gap-12">
+                    <div class="md:w-1/2 md:text-left md:pl-12">
+                        <div class="bg-primary rounded-2xl p-7 card-hover">
+                            <span class="text-xs font-semibold tracking-widest uppercase text-accent mb-2 block">Vision</span>
+                            <h3 class="font-serif text-xl font-500 text-white mb-2">Universal Access to Quality Education</h3>
+                            <p class="text-white/60 text-sm leading-relaxed">AI could democratize education globally — a child in a rural village could receive the same quality of personalized instruction as one in a top city school.</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-accent rounded-full border-4 border-warm-bg z-10 shadow-md"></div>
+                    <div class="md:w-1/2 md:text-right md:pr-12">
+                        <span class="inline-flex items-center gap-2 text-sm font-semibold text-primary bg-soft-green px-4 py-2 rounded-full">
+                            <i data-lucide="star" class="w-4 h-4"></i> The Ultimate Goal
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONCLUSION ===== -->
+    <section id="conclusion" class="py-20 lg:py-28 bg-warm-card relative overflow-hidden">
+        <!-- Decorative -->
+        <div class="absolute top-10 left-10 w-40 h-40 bg-accent/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-56 h-56 bg-primary/5 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <span class="fade-up text-xs font-semibold tracking-[0.2em] uppercase text-mid-green mb-4 block">Final Thoughts</span>
+                    <h2 class="fade-up stagger-1 font-serif text-3xl lg:text-4xl xl:text-5xl font-500 tracking-tight text-primary leading-tight mb-6">
+                        Conclusion
+                    </h2>
+                    <div class="section-divider mx-auto fade-up stagger-2"></div>
+                </div>
+
+                <div class="fade-up stagger-3 bg-white rounded-3xl p-8 lg:p-12 shadow-xl shadow-slate-900/5 border border-warm-border/50">
+                    <div class="space-y-5 text-slate-600 text-lg leading-relaxed">
+                        <p>
+                            Artificial Intelligence is not merely a technological upgrade for education — it is a <strong class="text-primary">paradigm shift</strong> in how humanity approaches learning. From personalized curricula to intelligent tutoring systems, AI is breaking down the one-size-fits-all model that has dominated education for centuries.
+                        </p>
+                        <p>
+                            However, as I have explored in this portfolio, the journey is not without obstacles. Issues of <strong class="text-primary">privacy, equity, bias, and the irreplaceable value of human connection</strong> must be navigated with care. The goal should never be to replace teachers but to empower them.
+                        </p>
+                        <p>
+                            As a student at <strong class="text-primary">ITI Women Ropar</strong>, I believe that understanding these technologies is essential for our generation. We are not just passive consumers of AI — we are the ones who will shape how it is used in the classrooms, workshops, and learning spaces of tomorrow.
+                        </p>
+                        <p class="text-primary font-medium font-serif text-xl italic">
+                            "The future of education is not AI versus teachers. It is AI with teachers — for the students."
+                        </p>
+                    </div>
+
+                    <!-- Key Takeaways -->
+                    <div class="mt-10 pt-8 border-t border-warm-border">
+                        <h4 class="font-semibold text-primary mb-4 text-sm tracking-wider uppercase">Key Takeaways</h4>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="check" class="w-3.5 h-3.5 text-primary"></i>
+                                </div>
+                                <p class="text-slate-600 text-sm">AI enables truly personalized learning experiences</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="check" class="w-3.5 h-3.5 text-primary"></i>
+                                </div>
+                                <p class="text-slate-600 text-sm">Tools like ChatGPT, Duolingo, and Khanmigo are already transforming classrooms</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="check" class="w-3.5 h-3.5 text-primary"></i>
+                                </div>
+                                <p class="text-slate-600 text-sm">Challenges of privacy, bias, and access must be addressed</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="check" class="w-3.5 h-3.5 text-primary"></i>
+                                </div>
+                                <p class="text-slate-600 text-sm">The future holds immersive, lifelong AI-powered learning for all</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== THANK YOU ===== -->
+    <section id="thankyou" class="py-20 lg:py-32 bg-primary relative overflow-hidden">
+        <!-- Decorative particles -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-[10%] left-[15%] w-2 h-2 bg-accent/30 rounded-full float-1"></div>
+            <div class="absolute top-[30%] right-[20%] w-3 h-3 bg-accent/20 rounded-full float-2"></div>
+            <div class="absolute bottom-[20%] left-[40%] w-2 h-2 bg-accent/25 rounded-full float-3"></div>
+            <div class="absolute top-[60%] left-[70%] w-1.5 h-1.5 bg-accent/35 rounded-full float-1"></div>
+            <div class="absolute bottom-[40%] right-[35%] w-2.5 h-2.5 bg-accent/20 rounded-full float-2"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-5 lg:px-8 text-center relative z-10">
+            <div class="fade-up mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-accent/10 rounded-3xl mb-8">
+                    <i data-lucide="heart" class="w-10 h-10 text-accent"></i>
+                </div>
+            </div>
+
+            <h2 class="fade-up stagger-1 font-serif text-4xl sm:text-5xl lg:text-6xl font-500 tracking-tight text-white leading-tight mb-6">
+                Thank You
+            </h2>
+
+            <p class="fade-up stagger-2 text-white/60 text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
+                I sincerely thank my teachers, mentors, and everyone at ITI Women Ropar who supported me in completing this research on AI in Education.
+            </p>
+
+            <div class="fade-up stagger-3 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 inline-block">
+                <div class="flex flex-col sm:flex-row items-center gap-6">
+                    <img src="https://picsum.photos/seed/kamalpreet-avatar/160/160.jpg" alt="Kamalpreet Kaur" class="w-20 h-20 rounded-2xl object-cover border-2 border-accent/30">
+                    <div class="text-left">
+                        <p class="text-white font-serif text-xl font-500">Kamalpreet Kaur</p>
+                        <p class="text-white/50 text-sm">Student, ITI Women Ropar</p>
+                        <p class="text-accent text-xs font-medium mt-1">AI in Education — Research Portfolio 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fade-up stagger-4 mt-12">
+                <a href="#hero" class="inline-flex items-center gap-2 text-accent text-sm font-medium hover:gap-3 transition-all duration-300">
+                    Back to top
+                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-deep-green py-8">
+        <div class="max-w-7xl mx-auto px-5 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center">
+                        <i data-lucide="brain" class="w-4 h-4 text-accent"></i>
+                    </div>
+                    <span class="font-serif text-sm text-white/80">Kamalpreet Kaur — ITI Women Ropar</span>
+                </div>
+                <p class="text-xs text-white/40">AI in Education Research Portfolio © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top fixed bottom-6 right-6 z-50 w-12 h-12 bg-primary text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center hover:bg-mid-green transition-all duration-300 hover:-translate-y-1" aria-label="Back to top">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // ===== NAVBAR SCROLL EFFECT =====
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = 0;
+
+        function updateNavbar() {
+            const scrollY = window.scrollY;
+            if (scrollY > 50) {
+                navbar.style.backgroundColor = 'rgba(250, 250, 248, 0.95)';
+                navbar.style.backdropFilter = 'blur(12px)';
+                navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+            } else {
+                navbar.style.backgroundColor = 'transparent';
+                navbar.style.backdropFilter = 'none';
+                navbar.style.boxShadow = 'none';
+            }
+            lastScrollY = scrollY;
+        }
+        window.addEventListener('scroll', updateNavbar, { passive: true });
+
+        // ===== SCROLL PROGRESS BAR =====
+        const scrollProgress = document.getElementById('scrollProgress');
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+            scrollProgress.style.transform = `scaleX(${progress})`;
+        }
+        window.addEventListener('scroll', updateProgress, { passive: true });
+
+        // ===== BACK TO TOP =====
+        const backToTop = document.getElementById('backToTop');
+        function updateBackToTop() {
+            if (window.scrollY > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+        window.addEventListener('scroll', updateBackToTop, { passive: true });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== MOBILE MENU =====
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -80px 0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Don't unobserve to allow re-triggering if needed, but for performance:
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.fade-up, .fade-left, .fade-right, .scale-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ===== ACTIVE NAV LINK HIGHLIGHTING =====
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+        // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initial calls
+        updateNavbar();
+        updateProgress();
+        updateBackToTop();
+    </script>
+</body>
+</html>
